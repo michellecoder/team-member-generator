@@ -1,3 +1,4 @@
+const fs = require('fs');
 const inquirer = require("inquirer");
 const path = require("path");
 
@@ -97,45 +98,226 @@ const managerQuestion = [{
 
 ];
 
-const nextQuestions = [{
-    type: "list",
-    message: "what is the engineer's name?",
-    name: "engineerName",
-    choices: ['Engineer', 'Intern'],
-}];
 
-const generator = () => {
 
-    function askManager() {
-        inquirer.prompt(managerQuestions)
-            .then(managerInformation => {
-                let managerInformation = { managerName, managerId, managerEmail, officeNumber }
-                employee = new Manager(managerName, managerId, managerEmail, officeNumber)
-            })
-    }
+let outputString = "";
+//page header 
+const pageHeader = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+    <header>
+        <h1>My Team</h1>
+    </header>
+<main>
+`;
 
-    function followingQustions() {
-        inquirer.prompt(nextQuestions)
-            .then()
-    }
+//end of webpage
+const pageFooter = `
+</main>
+</body>
+</html>
+`;
+
+//generate stylesheet
+const styles = `
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
-generator();
+body {
+    font-family: sans-serif;
+    background-color: white;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: rgb(226, 43, 186);
+    color: white;
+}
+
+h2 {
+    margin-left: 10px;
+    padding: 5px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 25px;
+}
+
+li {
+    list-style: none;
+    padding: 5px;
+    border-style: dotted;
+    border-color: darkgray;
+    margin: 5px 0px 5px -35px;
+}
+
+.card {
+    background-color: rgb(55, 28, 175);
+    border-radius: 5px;
+    border-width: 1px;
+    margin-bottom: 25px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
+    color: white;
+    width: 400px;
+    padding: 10px;
+}
+
+.card-header {
+    background-color: rgb(226, 43, 211);
+    width: 100%;
+    margin-top: -20px;
+    border-radius: 5px;
+    border-width: 1px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
+}
+
+.card-body {
+    color: black;
+}
+`
+
+function addManager(name, id, email, phone) {
+    const manager = new Manager(name, id, email, phone);
+    myTeam.push(manager);
+}
+
+function addEngineer(name, id, email, github) {
+    const engineer = new Engineer(name, id, email, github);
+    myTeam.push(engineer);
+}
+
+function addIntern(name, id, email, school) {
+    const intern = new Intern(name, id, email, school);
+    myTeam.push(intern);
+}
+
+//ASK USER IF THEY WANT TO CONTINUE ADDING TEAM MEMBERS
+function askQ() {
+    return inquirer
+        .prompt(controlQuestions)
+        .then((data) => {
+            const reply = `${data.addanother}`;
+            if (reply === 'Engineer') {
+                return inquirer
+                    .prompt(engineerQuestions)
+                    .then((data) => {
+                        addEngineer(data.name, data.id, data.email, data.github);
+                        return askQ();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else if (reply === 'Intern') {
+                return inquirer
+                    .prompt(internQuestions)
+                    .then((data) => {
+                        addIntern(data.name, data.id, data.email, data.school);
+                        return askQ();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                return;
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
+// WRITENTO WEBPAGE
 inquirer
     .prompt(managerQuestions)
-    .then((answers) => {
-
-        const manager = new Manager(managerAnswers);
-
-        return nextQuestion();
+    .then((data) => {
+        addManager(data.name, data.id, data.email, data.phone);
+        //ask for more team members 
+        return askQ();
     })
     .then(() => {
-
+        generateWebpage(myTeam);
     })
     .catch((error) => {
-        if (error.Error) {
-
-        } else {
-
-        }
+        console.log(error);
     });
+
+//CREATE NEW DATA CARD HTML BASED ON TEAM MEMBER DATA
+function generateTeamCard(role, employee, id, email, special) {
+    let pageCardOutput = `
+    <div class='card'>
+    <div class='card-header'>
+        <h2>${employee}</h2>
+        <h2>${role}</h2>
+    </div>
+    <div class='card-body'>
+        <ul>
+            <li>ID: ${id}</li>
+            <li>EMAIL: ${email}</li>
+            <li>${special}</li>
+        </ul>
+    </div>
+    </div>
+    `;
+    return pageCardOutput;
+}
+
+//WRITES GENERATED HTML STRING TO HTML FILE 
+function generateTeamWebpage(team) {
+    //add page header to output string
+    outputString = pageHeader;
+    const filepath = `./assets/`;
+    const outputHTML = `output.html`;
+    const outputCSS = `styles.css`;
+
+    //add each team member from team array 
+    team.forEach(element => {
+        const role = element.getRole();
+        const employee = element.getName();
+        const id = element.getId();
+        const email = element.getEmail();
+        let special = "";
+        //adjust last variable based on employee type
+        if (role === 'Manager') {
+            special = `PHONE: ${element.getOfficeNumber()}`;
+        } else if (role === 'Engineer') {
+            // special = `GITHUB NAME: https://github.com/${element.getGitHub()}`;
+            special = `<a href="https://github.com/${element.getGitHub()}" target="_blank">GITHUB NAME: https://github.com/${element.getGitHub()}</a>`;
+        } else {
+            special = `SCHOOL: ${element.getSchool()}`;
+        }
+        newCardOutput = generateTeamCard(role, employee, id, email, special);
+        outputString = outputString + newCardOutput;
+    });
+    //add page footer to output string
+    outputString = outputString + pageFooter;
+    //write webpage from output string content
+    fs.writeFile(`${filepath}${outputHTML}`, `
+        ${outputString}
+        `, (err) =>
+        err ? console.error(err) : console.log('output.html written'))
+
+    fs.writeFile(`${filepath}${outputCSS}`, `
+        ${styles}
+        `, (err) =>
+        err ? console.error(err) : console.log('styles.css written'))
+}
