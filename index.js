@@ -3,12 +3,12 @@ const inquirer = require("inquirer");
 const path = require("path");
 
 
-const Employee = require('../lib/employee');
-const Engineer = require('../lib/engineer');
-const Intern = require('../lib/intern');
-const Manager = require('../lib/manager');
+const Employee = require('./lib/Employee');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+const Manager = require('./lib/Manager');
 
-const team = [];
+const myTeam = [];
 
 const managerQuestion = [{
         type: "input",
@@ -35,6 +35,12 @@ const managerQuestion = [{
     },
 
 
+    {
+        type: "input",
+        message: "What is the phone number?",
+        name: "phoneNumber",
+    },
+
 
 
 ];
@@ -49,13 +55,13 @@ const internQuestion = [{
     {
         type: "input",
         message: "What is the intern's id?",
-        name: "managerId",
+        name: "internId",
     },
 
     {
         type: "input",
         message: "What is the intern's email?",
-        name: "managerEmail",
+        name: "internEmail",
     },
 
     {
@@ -69,7 +75,7 @@ const internQuestion = [{
 
 ];
 
-const managerQuestion = [{
+const engineerQuestion = [{
         type: "input",
         message: "What is the engineer's name?",
         name: "engineerName",
@@ -167,12 +173,12 @@ li {
     list-style: none;
     padding: 5px;
     border-style: dotted;
-    border-color: darkgray;
+    border-color: rgb(88, 73, 86);
     margin: 5px 0px 5px -35px;
 }
 
 .card {
-    background-color: rgb(55, 28, 175);
+    background-color: rgb(19, 9, 17);
     border-radius: 5px;
     border-width: 1px;
     margin-bottom: 25px;
@@ -181,7 +187,6 @@ li {
     width: 400px;
     padding: 10px;
 }
-
 .card-header {
     background-color: rgb(226, 43, 211);
     width: 100%;
@@ -192,47 +197,56 @@ li {
 }
 
 .card-body {
-    color: black;
+    color: rgb(212, 228, 226);
 }
+
+        
 `
 
-function addManager(name, id, email, phone) {
-    const manager = new Manager(name, id, email, phone);
+
+
+function addManager(name, id, email, phoneNumber) {
+    const manager = new Manager(name, id, email, phoneNumber);
     myTeam.push(manager);
-}
+};
 
 function addEngineer(name, id, email, github) {
     const engineer = new Engineer(name, id, email, github);
     myTeam.push(engineer);
-}
+};
 
 function addIntern(name, id, email, school) {
     const intern = new Intern(name, id, email, school);
     myTeam.push(intern);
-}
-
-//ASK USER IF THEY WANT TO CONTINUE ADDING TEAM MEMBERS
-function askQ() {
+};
+const controlQuestion = [{
+        type: 'list',
+        name: 'addanother',
+        message: 'What do you want to do next?',
+        choices: ['Engineer', 'Intern', 'Done']
+    }]
+    //ASK USER IF THEY WANT TO CONTINUE ADDING TEAM MEMBERS
+function askQuestion() {
     return inquirer
-        .prompt(controlQuestions)
+        .prompt(controlQuestion)
         .then((data) => {
             const reply = `${data.addanother}`;
             if (reply === 'Engineer') {
                 return inquirer
-                    .prompt(engineerQuestions)
+                    .prompt(engineerQuestion)
                     .then((data) => {
-                        addEngineer(data.name, data.id, data.email, data.github);
-                        return askQ();
+                        addEngineer(data.engineerName, data.engineerId, data.engineerEmail, data.engineerGitHub);
+                        return askQuestion();
                     })
                     .catch((error) => {
                         console.log(error);
                     });
             } else if (reply === 'Intern') {
                 return inquirer
-                    .prompt(internQuestions)
+                    .prompt(internQuestion)
                     .then((data) => {
-                        addIntern(data.name, data.id, data.email, data.school);
-                        return askQ();
+                        addIntern(data.internName, data.internId, data.internEmail, data.internSchool);
+                        return askQuestion();
                     })
                     .catch((error) => {
                         console.log(error);
@@ -248,11 +262,12 @@ function askQ() {
 
 // WRITENTO WEBPAGE
 inquirer
-    .prompt(managerQuestions)
+    .prompt(managerQuestion)
     .then((data) => {
-        addManager(data.name, data.id, data.email, data.phone);
+
+        addManager(data.managerName, data.managerId, data.managerEmail, data.phoneNumber);
         //ask for more team members 
-        return askQ();
+        return askQuestion();
     })
     .then(() => {
         generateWebpage(myTeam);
@@ -282,7 +297,7 @@ function generateTeamCard(role, employee, id, email, special) {
 }
 
 //WRITES GENERATED HTML STRING TO HTML FILE 
-function generateTeamWebpage(team) {
+function generateWebpage(team) {
     //add page header to output string
     outputString = pageHeader;
     const filepath = `./assets/`;
@@ -297,6 +312,7 @@ function generateTeamWebpage(team) {
         const email = element.getEmail();
         let special = "";
         //adjust last variable based on employee type
+        // console.log(role, employee, email, id);
         if (role === 'Manager') {
             special = `PHONE: ${element.getOfficeNumber()}`;
         } else if (role === 'Engineer') {

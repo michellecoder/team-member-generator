@@ -37,12 +37,12 @@ li {
     list-style: none;
     padding: 5px;
     border-style: dotted;
-    border-color: darkgray;
+    border-color: rgb(88, 73, 86);
     margin: 5px 0px 5px -35px;
 }
 
 .card {
-    background-color: rgb(55, 28, 175);
+    background-color: rgb(19, 9, 17);
     border-radius: 5px;
     border-width: 1px;
     margin-bottom: 25px;
@@ -62,5 +62,5 @@ li {
 }
 
 .card-body {
-    color: black;
+    color: rgb(212, 228, 226);
 }
