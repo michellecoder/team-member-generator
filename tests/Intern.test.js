@@ -1,45 +1,46 @@
 const { it, expect } = require('@jest/globals');
-const Engineer = require("../lib/Engineer.js")
 
-describe("Engineer Tests", () => {
+const Intern = require('../lib/Intern.js');
+
+describe("Intern Tests", () => {
     describe("test name", () => {
         it('name', () => {
-            const engineer = new Engineer('William');
-            expect(engineer.name).toEqual('William');
+            const intern = new Intern('William');
+            expect(intern.name).toEqual('William');
         })
         it('id', () => {
-            const engineer = new Engineer('Alex', '1');
-            expect(engineer.id).toEqual('1');
+            const intern = new Intern('Alex', '1');
+            expect(intern.id).toEqual('1');
         })
         it('email', () => {
-            const engineer = new Engineer('John', '2', 'myaddress@gmail.com');
-            expect(engineer.email).toEqual('myaddress@gmail.com');
+            const intern = new Intern('John', '2', 'myaddress@gmail.com');
+            expect(intern.email).toEqual('myaddress@gmail.com');
         })
     })
 })
 
-describe("Employee Method Test", () => {
+describe("Intern Method Test", () => {
     describe("get name", () => {
         it('getName', () => {
-            const engineer = new Engineer('William');
-            expect(engineer.getName).toEqual('William');
+            const intern = new Intern('William');
+            expect(intern.getName()).toEqual('William');
         })
         it('getId', () => {
-            const engineer = new Engineer('Alex', '1');
-            expect(engineer.GetId).toEqual('1');
+            const intern = new Intern('Alex', '1');
+            expect(intern.getId()).toEqual('1');
         })
         it('geteEmail', () => {
-            const engineer = new engineer('John', '2', 'myaddress@gmail.com');
-            expect(engineer.GetEmail).toEqual('myaddress@gmail.com');
+            const intern = new Intern('John', '2', 'myaddress@gmail.com');
+            expect(intern.getEmail()).toEqual('myaddress@gmail.com');
         })
     })
 
-    it('getGitHub', () => {
-        const engineer = new Engineer('Veronica', '3', 'veronica@aol.com', 'tacocat');
-        expect(engineer.getGitHub()).toEqual('harpo');
+    it('getSchool', () => {
+        const intern = new Intern('Veronica', '3', 'veronica@aol.com', 'UW');
+        expect(intern.getSchool()).toEqual('UW');
     })
     it('getRole', () => {
-        const engineer = new Engineer('Bob');
-        expect(engineer.getRole()).toEqual('Engineer');
+        const intern = new Intern('Bob');
+        expect(intern.getRole()).toEqual('Intern');
     })
 })
