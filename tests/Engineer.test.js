@@ -36,7 +36,7 @@ describe("Engineer Method Test", () => {
 
     it('getGitHub', () => {
         const engineer = new Engineer('Veronica', '3', 'veronica@aol.com', 'tacocat');
-        expect(engineer.getGithub()).toEqual('tacocat');
+        expect(engineer.getGitHub()).toEqual('tacocat');
     })
     it('getRole', () => {
         const engineer = new Engineer('Bob');
