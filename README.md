@@ -12,7 +12,7 @@ This project gives a manager the ability to track their team members information
 * [Tests](#tests)
 * [Questions](#questions)
 * [Screenshot](#screenshot)
-* [Video Link](#videolink)
+* [Walkthrough](#walkthrough)
 
 ## Installation
   This app is installed with a Node framework, Javascript, and generated HTML and CSS.
@@ -26,13 +26,12 @@ Contributions can be made by adding business information to the input fields.
   The terminal and written tests were used for this application.
 
   ## Screenshot
-![homework 10](https://user-images.githubusercontent.com/77079861/134604223-05164dc9-221d-4300-b477-89b412da73b5.JPG)
+![homework 10](https://user-images.githubusercontent.com/77079861/134605184-94f34e32-4d0f-4ff1-b4a8-8d52b9e91f4a.JPG)
+
+  ## Walkthrough
 
 
-  ## Video Link
-
-
-https://user-images.githubusercontent.com/77079861/134603922-8d6921dd-f949-42e4-a81a-740604ebcd80.mp4
+https://user-images.githubusercontent.com/77079861/134605124-b739d196-aae6-4044-a262-676f2504a8dd.mp4
 
 
 
