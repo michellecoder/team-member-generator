@@ -12,7 +12,7 @@ This project gives a manager the ability to track their team members information
 * [Tests](#tests)
 * [Questions](#questions)
 * [Screenshot](#screenshot)
-* [Video Link](#videolink)
+* [Walkthrough](#walkthrough)
 
 ## Installation
   This app is installed with a Node framework, Javascript, and generated HTML and CSS.
