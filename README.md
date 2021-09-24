@@ -26,8 +26,14 @@ Contributions can be made by adding business information to the input fields.
   The terminal and written tests were used for this application.
 
   ## Screenshot
+![homework 10](https://user-images.githubusercontent.com/77079861/134604223-05164dc9-221d-4300-b477-89b412da73b5.JPG)
+
 
   ## Video Link
+
+
+https://user-images.githubusercontent.com/77079861/134603922-8d6921dd-f949-42e4-a81a-740604ebcd80.mp4
+
 
 
   ## Questions
